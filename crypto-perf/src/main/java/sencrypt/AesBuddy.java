@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 
-public class AesBuddy {
+public class AesBuddy extends AesBase{
 
     public static final String PRE_HASHED_KEY = "mysecretkeyt";
 
@@ -42,24 +42,24 @@ public class AesBuddy {
         BUDDY_CONF_128_GCM = Clojure.read("{:algorithm :aes128-gcm}");
 
     }
-//
-//    @Benchmark
-//    public void aes128CbcHmacSha256() throws Exception {
-//        ENCRYPT.invoke(
-//                AesUtil.plaintext,
-//                SHA256.invoke(PRE_HASHED_KEY),
-//                RANDOM_BYTES.invoke(16L),
-//                BUDDY_CONF_256);
-//    }
-//
-//    @Benchmark
-//    public void aes256CbcHmacSha512() throws Exception {
-//        ENCRYPT.invoke(
-//                AesUtil.plaintext,
-//                SHA512.invoke(PRE_HASHED_KEY),
-//                RANDOM_BYTES.invoke(16L),
-//                BUDDY_CONF_512);
-//    }
+
+    @Benchmark
+    public void aes128CbcHmacSha256() throws Exception {
+        ENCRYPT.invoke(
+                AesUtil.plaintext,
+                SHA256.invoke(PRE_HASHED_KEY),
+                RANDOM_BYTES.invoke(16L),
+                BUDDY_CONF_256);
+    }
+
+    @Benchmark
+    public void aes256CbcHmacSha512() throws Exception {
+        ENCRYPT.invoke(
+                AesUtil.plaintext,
+                SHA512.invoke(PRE_HASHED_KEY),
+                RANDOM_BYTES.invoke(16L),
+                BUDDY_CONF_512);
+    }
 
     @Benchmark
     public void aes128GCM() throws Exception {

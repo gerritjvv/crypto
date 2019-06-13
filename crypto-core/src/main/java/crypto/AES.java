@@ -4,15 +4,19 @@ import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.ByteBuffer;
 import java.security.*;
 
 /**
- * Class that encrypts using AES
+ * Class that encrypts using AES, supports CBC+HMAC and GCM modes
  * <p/>
  * Taken shamelessly from:
  * https://proandroiddev.com/security-best-practices-symmetric-encryption-with-aes-in-java-7616beaaade9
  * https://proandroiddev.com/security-best-practices-symmetric-encryption-with-aes-in-java-and-android-part-2-b3b80e99ad36
+ * <p/>
+ * <p>
+ * References:
+ * GCM: https://tools.ietf.org/html/rfc4543#page-12
+ * https://csrc.nist.gov/publications/detail/sp/800-38d/final
  */
 public class AES {
 
@@ -34,17 +38,26 @@ public class AES {
         return encryptCBC((byte) 0, key, txt);
     }
 
+
     /**
      * Performs a AES CBC encryption with HMAC
      * The result is a byte array with
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len], mac-len:byte, mac:byte-array[mac-len], encrypted-text:byte-array ]
      */
     public static final byte[] encryptCBC(byte version, Key.ExpandedKey key, byte[] txt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        return encryptCBC(version, AES_CBC_CIPHER_LBL, key, txt);
+    }
+
+    /**
+     * This method allows to pass in a custom cipher provider.
+     * By default please use {@link #encryptCBC(byte, Key.ExpandedKey, byte[])} which will use the default JCE provider.
+     */
+    public static final byte[] encryptCBC(byte version, String cipherProviderName, Key.ExpandedKey key, byte[] txt) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException {
 
         byte[] iv = new byte[CBC_IV_LENGTH];
         Random.nextBytes(iv);
 
-        final Cipher cipher = Cipher.getInstance(AES_CBC_CIPHER_LBL);
+        Cipher cipher = Cipher.getInstance(cipherProviderName);
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.encKey, "AES"), new IvParameterSpec(iv));
         byte[] cipherText = cipher.doFinal(txt);
 
@@ -95,6 +108,14 @@ public class AES {
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len],  mac-len:byte, mac:byte-array[mac-len],  encrypted-text:byte-array ]
      */
     public static final byte[] decryptCBC(byte version, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+        return decryptCBC(version, AES_CBC_CIPHER_LBL, key, encryptedMessage);
+    }
+
+    /**
+     * This method allows to pass in a custom cipher.
+     * By default please use {@link #decryptCBC(byte, Key.ExpandedKey, byte[])}} which will use the default JCE provider.
+     */
+    public static final byte[] decryptCBC(byte version, String cipherProvider, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException {
 
         int i = 0;
         int cipherVersion = encryptedMessage[i++];
@@ -141,7 +162,7 @@ public class AES {
             throw new SecurityException("could not authenticate");
         }
 
-        final Cipher cipher = Cipher.getInstance(AES_CBC_CIPHER_LBL);
+        Cipher cipher = Cipher.getInstance(cipherProvider);
         cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.encKey, "AES"), new IvParameterSpec(encryptedMessage, ivPos, ivLength));
         return cipher.doFinal(encryptedMessage, cipherTextPos, cipherTextLen);
     }
@@ -157,15 +178,19 @@ public class AES {
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len], encrypted-text:byte-array ]
      */
     public static final byte[] encryptGCM(byte version, Key.ExpandedKey key, byte[] txt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        return encryptGCM(version, AES_GCM_CIPHER_LBL, key, txt);
+    }
 
-        if (key.keySize.getKeySizeBytes() > 16) {
-            throw new InvalidAlgorithmParameterException("GCM keys sizes can only be 128, 120, 112, 104, 96 bits: got " + key.keySize.getKeySizeBits());
-        }
+    /**
+     * This method allows to pass in a custom cipher.
+     * By default please use {@link #decryptGCM(byte, Key.ExpandedKey, byte[])}  which will use the default JCE provider.
+     */
+    public static final byte[] encryptGCM(byte version, String cipherProvider, Key.ExpandedKey key, byte[] txt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
 
         byte[] iv = new byte[GCM_IV_LENGTH];
         Random.nextBytes(iv);
 
-        final Cipher cipher = Cipher.getInstance(AES_GCM_CIPHER_LBL);
+        final Cipher cipher = Cipher.getInstance(cipherProvider);
         GCMParameterSpec parameterSpec = new GCMParameterSpec(key.keySize.getKeySizeBits(), iv);
 
         cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key.encKey, "AES"), parameterSpec);
@@ -185,7 +210,7 @@ public class AES {
     }
 
     public static final byte[] decryptGCM(Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException {
-        return decryptGCM((byte)0, key, encryptedMessage);
+        return decryptGCM((byte) 0, key, encryptedMessage);
     }
 
     /**
@@ -195,6 +220,15 @@ public class AES {
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len], encrypted-text:byte-array ]
      */
     public static final byte[] decryptGCM(byte version, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+        return decryptGCM(version, AES_GCM_CIPHER_LBL, key, encryptedMessage);
+    }
+
+
+    /**
+     * This method allows to pass in a custom cipher.
+     * By default please use {@link #decryptGCM(byte, Key.ExpandedKey, byte[])}  which will use the default JCE provider.
+     */
+    public static final byte[] decryptGCM(byte version, String cipherProvider, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException {
 
         int i = 0;
         int cipherVersion = encryptedMessage[i++];
@@ -218,7 +252,7 @@ public class AES {
         int cipherTextLen = encryptedMessage.length - cipherTextPos;
 
 
-        final Cipher cipher = Cipher.getInstance(AES_GCM_CIPHER_LBL);
+        final Cipher cipher = Cipher.getInstance(cipherProvider);
         cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key.encKey, "AES"), new GCMParameterSpec(key.keySize.getKeySizeBits(), iv));
 
         return cipher.doFinal(encryptedMessage, cipherTextPos, cipherTextLen);

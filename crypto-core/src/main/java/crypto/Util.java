@@ -7,7 +7,7 @@ public class Util {
     public static final byte[] genData(int byteLen) {
         byte[] v = new byte[byteLen];
 
-        java.util.Random r = new Random();
+        Random r = new Random();
 
         for (int i = 0; i < (byteLen); i++) {
             v[i] = (byte) r.nextInt(127);

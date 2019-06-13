@@ -41,9 +41,9 @@ public class AESTest {
         byte[] rawData = Util.genData(4096);
 
         Key.ExpandedKey key = Key.KeySize.AES_128.genKeysHmacSha();
-        byte[] encryptedData = AES.encryptGCM((byte)0, key, rawData);
+        byte[] encryptedData = AES.encryptGCM(key, rawData);
 
-        byte[] decryptedData = AES.decryptGCM((byte)0, key, encryptedData);
+        byte[] decryptedData = AES.decryptGCM(key, encryptedData);
 
 
         Assert.assertArrayEquals(rawData, decryptedData);

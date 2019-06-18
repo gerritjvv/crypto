@@ -5,6 +5,8 @@ import crypto.Key;
 import crypto.Util;
 import org.openjdk.jmh.annotations.Benchmark;
 
+import javax.crypto.Cipher;
+
 public class AesJce extends AesBase{
 
     private static byte[] GCM_128_ENCRYPTED;
@@ -17,6 +19,7 @@ public class AesJce extends AesBase{
             GCM_128_ENCRYPTED = AES.encryptGCM(Key.KeySize.AES_128.genKeysHmacSha(DEFAULT_KEY), AesUtil.plaintext);
             CBC_128_ENCRYPTED = AES.encryptCBC(Key.KeySize.AES_128.genKeysHmacSha(DEFAULT_KEY), AesUtil.plaintext);
             CBC_256_ENCRYPTED = AES.encryptCBC(Key.KeySize.AES_256.genKeysHmacSha(DEFAULT_KEY), AesUtil.plaintext);
+
         } catch (Exception e){
             e.printStackTrace();
         }

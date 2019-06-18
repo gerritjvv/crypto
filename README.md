@@ -69,3 +69,7 @@ byte[] encryptedData = crypto.AES.encryptGCM(key, someData);
 byte[] decryptedData = crypto.AES.decryptGCM(key, encryptedData);
 
 ```
+
+## More examples:
+
+See: [AESTest.java](https://github.com/gerritjvv/crypto/blob/master/crypto-core/src/test/java/crypto/AESTest.java)

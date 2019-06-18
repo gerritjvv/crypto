@@ -23,6 +23,8 @@ public class AesBuddy extends AesBase{
     static final IFn ENCRYPT;
     static final Object BUDDY_CONF_512, BUDDY_CONF_256, BUDDY_CONF_128_GCM;
 
+    static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
     static {
         IFn require = Clojure.var("clojure.core", "require");
         require.invoke(Clojure.read("buddy.core.nonce"));
@@ -30,7 +32,11 @@ public class AesBuddy extends AesBase{
         require.invoke(Clojure.read("buddy.core.crypto"));
         require.invoke(Clojure.read("buddy.core.codecs"));
 
-
+        /**
+           call with SECURE_RANDOM to avoid overhead of creating the SecureRandom instance on each invocation.
+           see: https://github.com/funcool/buddy-core/blob/master/src/buddy/core/nonce.clj#L34
+           and https://github.com/gerritjvv/crypto/issues/1
+         */
         RANDOM_BYTES = Clojure.var("buddy.core.nonce", "random-bytes");
         SHA256 = Clojure.var("buddy.core.hash", "sha256");
         SHA512 = Clojure.var("buddy.core.hash", "sha512");
@@ -48,7 +54,7 @@ public class AesBuddy extends AesBase{
         ENCRYPT.invoke(
                 AesUtil.plaintext,
                 SHA256.invoke(PRE_HASHED_KEY),
-                RANDOM_BYTES.invoke(16L),
+                RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
                 BUDDY_CONF_256);
     }
 
@@ -57,7 +63,7 @@ public class AesBuddy extends AesBase{
         ENCRYPT.invoke(
                 AesUtil.plaintext,
                 SHA512.invoke(PRE_HASHED_KEY),
-                RANDOM_BYTES.invoke(16L),
+                RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
                 BUDDY_CONF_512);
     }
 
@@ -66,7 +72,7 @@ public class AesBuddy extends AesBase{
         ENCRYPT.invoke(
                 AesUtil.plaintext,
                 SHA256.invoke(PRE_HASHED_KEY),
-                RANDOM_BYTES.invoke(12L),
+                RANDOM_BYTES.invoke(12L, SECURE_RANDOM),
                 BUDDY_CONF_128_GCM);
     }
 

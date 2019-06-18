@@ -1,0 +1,72 @@
+
+<html>
+<head>
+    <style>
+
+
+        html, body, #container {
+            width: 90%;
+            height: 90%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+<div id="container"></div>
+
+<script lang="javascript">
+
+
+
+    anychart.onDocumentReady(function() {
+
+        // set the data
+        var data = {
+            header: ["Name", "op/s"],
+            rows: [
+                ["AesJce.enc_aes128CbcHmacSha256", 40722.671],
+                ["AesJce.enc_aes256CbcHmacSha512", 39288.300],
+                ["AesJce.enc_aes128GCM", 75599.381],
+                ["AesJce.dec_aes128CbcHmacSha256", 49830.138],
+                ["AesJce.dec_aes256CbcHmacSha512", 51758.272],
+                ["AesJce.dec_aes128GCM", 76144.372],
+
+                ["AesCommons.enc_aes128CbcHmacSha256", 26567.236],
+                ["AesCommons.enc_aes128GCM", 59517.955],
+                ["AesCommons.dec_aes128CbcHmacSha256", 25821.145],
+                ["AesCommons.dec_aes128GCM", 51019.787],
+
+                ["AesBouncyCastle.enc_aes128CbcHmacSha256", 23981.183],
+                ["AesBouncyCastle.enc_aes128GCM ", 19993.285],
+                ["AesBouncyCastle.dec_aes128CbcHmacSha256", 24996.014],
+                ["AesBouncyCastle.dec_aes128GCM", 19743.066],
+                ["Buddy.aes128CbcHmacSha256", 482.811],
+                ["Buddy.aes256CbcHmacSha512", 487.327],
+                ["Buddy.aes256GCM", 15845.017],
+            ]
+        };
+
+        // create the chart
+        var chart = anychart.bar();
+
+        // add data
+        chart.data(data);
+
+
+        // set the chart title
+        chart.title("JVM AES CBC & GCM Encryption/Decryption");
+
+        // draw
+        chart.container("container");
+        chart.draw();
+    });
+
+</script>
+</body>
+</html>
+

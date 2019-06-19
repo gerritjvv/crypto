@@ -76,6 +76,7 @@ AesBouncyCastle.enc_aes128CbcHmacSha256  thrpt  200  10552.567 ± 185.615  ops/s
 AesBouncyCastle.enc_aes128GCM            thrpt  200   8297.211 ± 169.168  ops/s
 
 AesBuddy.aes128CbcHmacSha256             thrpt  200    234.047 ±   4.037  ops/s
+AesBuddy.aes256GCM                       thrpt  200   6271.101 ± 174.317  ops/s
 AesBuddy.aes256CbcHmacSha512             thrpt  200    226.719 ±   3.197  ops/s
 
 AesCommons.dec_aes128CbcHmacSha256       thrpt  200  19017.686 ± 451.684  ops/s
@@ -101,8 +102,8 @@ AesBouncyCastle.enc_aes128CbcHmacSha256  thrpt  200   9654.405 ± 197.824  ops/s
 AesBouncyCastle.enc_aes128GCM            thrpt  200   7485.948 ± 158.881  ops/s
 
 AesBuddy.aes128CbcHmacSha256             thrpt  200    195.845 ±   5.030  ops/s
-AesBuddy.aes256CbcHmacSha512             thrpt  200    197.908 ±   3.980  ops/s
 AesBuddy.aes256GCM                       thrpt  200   6249.484 ± 166.694  ops/s
+AesBuddy.aes256CbcHmacSha512             thrpt  200    197.908 ±   3.980  ops/s
 
 AesCommons.dec_aes128CbcHmacSha256       thrpt  200   7799.234 ± 165.025  ops/s
 AesCommons.dec_aes128GCM                 thrpt  200   7661.790 ± 124.741  ops/s

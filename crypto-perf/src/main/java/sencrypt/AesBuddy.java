@@ -1,29 +1,22 @@
 package sencrypt;
 
-import at.favre.lib.crypto.HKDF;
 import clojure.java.api.Clojure;
 import clojure.lang.IFn;
 import org.openjdk.jmh.annotations.Benchmark;
 
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 public class AesBuddy extends AesBase{
 
-    public static final String PRE_HASHED_KEY = "mysecretkeyt";
 
-    static final IFn RANDOM_BYTES;
-    static final IFn SHA256, SHA512;
-    static final IFn ENCRYPT;
-    static final Object BUDDY_CONF_512, BUDDY_CONF_256, BUDDY_CONF_128_GCM;
+    private static final IFn RANDOM_BYTES;
+    private static final IFn SHA256, SHA512;
+    private static final IFn ENCRYPT;
+    private static final Object BUDDY_CONF_512, BUDDY_CONF_256, BUDDY_CONF_128_GCM;
 
-    static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
 
     static {
         IFn require = Clojure.var("clojure.core", "require");
@@ -49,11 +42,19 @@ public class AesBuddy extends AesBase{
 
     }
 
+
+    private static final Object PRE_HASHED_KEY_256 = SHA256.invoke("mysecretkeyt");
+
+    private static final Object PRE_HASHED_KEY_128 = takeFirst16((byte[])SHA256.invoke("mysecretkeyt"));
+
+
+    private static final Object PRE_HASHED_KEY_512 = SHA512.invoke("mysecretkeyt");
+
     @Benchmark
     public void aes128CbcHmacSha256() throws Exception {
         ENCRYPT.invoke(
                 AesUtil.plaintext,
-                SHA256.invoke(PRE_HASHED_KEY),
+                PRE_HASHED_KEY_256,
                 RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
                 BUDDY_CONF_256);
     }
@@ -62,19 +63,25 @@ public class AesBuddy extends AesBase{
     public void aes256CbcHmacSha512() throws Exception {
         ENCRYPT.invoke(
                 AesUtil.plaintext,
-                SHA512.invoke(PRE_HASHED_KEY),
+                PRE_HASHED_KEY_512,
                 RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
                 BUDDY_CONF_512);
     }
 
     @Benchmark
-    public void aes128GCM() throws Exception {
+    public void aes256GCM() throws Exception {
         ENCRYPT.invoke(
                 AesUtil.plaintext,
-                SHA256.invoke(PRE_HASHED_KEY),
-                RANDOM_BYTES.invoke(12L, SECURE_RANDOM),
+                PRE_HASHED_KEY_128,
+                RANDOM_BYTES.invoke(12L),
                 BUDDY_CONF_128_GCM);
     }
 
 
+    /*
+      Take the first 16 bytes of a 32 byte hash.
+     */
+    private static Object takeFirst16(byte[] bts) {
+        return Arrays.copyOf(bts, 16);
+    }
 }

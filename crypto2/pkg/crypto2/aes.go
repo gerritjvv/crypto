@@ -67,7 +67,7 @@ func EncryptGCM(encKey, input []byte) ([]byte, error)  {
 	//----------- Pack the message
 
 	// create output tag
-	output := make([]byte, 1 + len(iv) + len(cipherText))
+	output := make([]byte, 1 + ivLen + len(cipherText))
 
 	i := 0
 	output[i] = byte(ivLen)
@@ -133,7 +133,7 @@ func DecryptGCM(encKey, input []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	dec, err := cipher.NewGCMWithNonceSize(c, len(iv))
+	dec, err := cipher.NewGCMWithNonceSize(c, ivLen)
 
 	if err != nil {
 		return nil, err
@@ -274,6 +274,9 @@ func EncryptCBCHmac(encKey, authKey, txt []byte, hashFn func() hash.Hash) ([]byt
 func GenerateNonce(size int) ([]byte, error) {
 
 	b := make([]byte, size)
+
+	// not checking len here because rand.Read doc reads:
+	//             On return, n == len(b) if and only if err == nil.
 	_, err := rand.Read(b)
 
 

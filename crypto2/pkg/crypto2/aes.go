@@ -16,9 +16,11 @@ import (
   Encrypt GCM and return
   Returns a byte array with [ ivLen:byte, iv..., cipherText... ]
 
-  Note: The key size must be 16bytes.
+  Note: The key size must be at least 16bytes.
         See https://crypto.stackexchange.com/questions/26783/ciphertext-and-tag-size-and-iv-transmission-with-aes-in-gcm-mode/26787 for
             an explanation of tag sizes.
+        If larger the first 16 bytes are used.
+
 */
 func EncryptGCM(encKey, input []byte) ([]byte, error)  {
 
@@ -83,6 +85,8 @@ Decrypt text that has been encrypted with EncryptGCM.
 The encKey must be the same key used during encryption.
 
 Expects the message format: [ ivLen:byte, iv..., cipherText... ]
+
+The must be at least 16 bytes, if larger the first 16 bytes are used.
 */
 func DecryptGCM(encKey, input []byte) ([]byte, error) {
 	encKeyLen := len(encKey)

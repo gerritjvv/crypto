@@ -83,3 +83,7 @@ BenchmarkDecryptCBC256-12         100000             18493 ns/op
 ./build.sh test
 ./build.sh bench
 ```
+
+## References 
+
+Go lang crypto poor performance: https://github.com/goamz/goamz/issues/81

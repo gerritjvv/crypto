@@ -1,0 +1,63 @@
+
+<html>
+<head>
+    <style>
+
+
+        html, body, #container {
+            width: 90%;
+            height: 90%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+    </style>
+
+</head>
+<body>
+<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+<div id="container"></div>
+
+<script lang="javascript">
+
+
+
+    anychart.onDocumentReady(function() {
+
+        // set the data
+        var data = {
+            header: ["Name", "op/s"],
+            rows: [
+                ["Golang-enc_aes128GCM", 4342],
+                ["Golang-dec_aes128GCM", 4201],
+                ["Golang-enc_aes128CbcHmacSha25", 18620],
+                ["Golang-dec_aes128CbcHmacSha256", 18493],
+
+                ["Java.enc_aes128GCM", 132084.915],
+                ["Java.dec_aes128GCM", 127963.728],
+
+                ["Java.enc_aes128CbcHmacSha256", 57025.908],
+                ["Java.dec_aes128CbcHmacSha256", 61900.490],
+            ]
+        };
+
+        // create the chart
+        var chart = anychart.bar();
+
+        // add data
+        chart.data(data);
+
+
+        // set the chart title
+        chart.title("Golang AES CBC & GCM Encryption/Decryption");
+
+        // draw
+        chart.container("container");
+        chart.draw();
+    });
+
+</script>
+</body>
+</html>
+

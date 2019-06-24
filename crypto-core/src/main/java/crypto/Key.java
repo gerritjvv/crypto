@@ -5,6 +5,16 @@ import at.favre.lib.crypto.HKDF;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+/**
+ *
+ * Helper class to crete the appropriate sized keys for AES 128 and AES 256 bit encryption.
+ *
+ * For AES 128 HMAC SHA-256 is used.
+ * For AES 256 HMAC SHA-512 is used.
+ *
+ * If you already have random keys generated you can use the ExpandedKey constructor directly.
+ *
+ */
 public class Key {
     private static final byte[] ENC_KEY_META = "encKey".getBytes(StandardCharsets.UTF_8);
     private static final byte[] AUTH_KEY_META = "authKey".getBytes(StandardCharsets.UTF_8);
@@ -56,6 +66,9 @@ public class Key {
             return genKeysHmacSha(newKey());
         }
 
+        /**
+         * Generates a SHA-512 encryption key, and a SHA-256 authentication key.
+         */
         public ExpandedKey genKeysHmacSha(byte[] key) {
             byte[] encKey = HKDF.fromHmacSha512().expand(key, ENC_KEY_META, sizeBts);
             byte[] authKey = HKDF.fromHmacSha256().expand(key, AUTH_KEY_META, macSizeBts); //HMAC-SHA256 key is 32, HMAC-SHA512 key is 64 byte

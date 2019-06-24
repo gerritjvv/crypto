@@ -73,3 +73,23 @@ byte[] decryptedData = crypto.AES.decryptGCM(key, encryptedData);
 ## More examples:
 
 See: [AESTest.java](https://github.com/gerritjvv/crypto/blob/master/crypto-core/src/test/java/crypto/AESTest.java)
+
+
+# Contributors
+
+Contributions PRs and suggestions are always welcome.
+
+Please ping me directly in the "issues" on "gerritjvv" or send me an email at gerritjvv@gmail.com, this way
+the issues/pull-requests won't just linger if github notifications doens't work.
+
+## Guide on publishing to maven central
+
+https://dzone.com/articles/publish-your-artifacts-to-maven-central
+
+### Release checklist
+
+#### gpg
+
+
+
+

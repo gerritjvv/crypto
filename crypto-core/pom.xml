@@ -8,6 +8,16 @@
     <name>crypto-core</name>
     <url>https://github.com/gerritjvv/crypto/crypto-core</url>
 
+    <description>
+        A simple fast encryption library for the JVM uses standard best practices and standard JVM classes
+    </description>
+    <developers>
+        <developer>
+            <id>gerritjvv</id>
+            <email>gerritjvv@gmail.com</email>
+            <url>http://github.com/gerritjvv</url>
+        </developer>
+    </developers>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -18,7 +28,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <additionalJOption>-Xdoclint:none</additionalJOption>
     </properties>
 
     <build>
@@ -109,10 +118,6 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
-                                <configuration>
-                                    <doclint>none</doclint>
-                                    <failOnError>false</failOnError>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

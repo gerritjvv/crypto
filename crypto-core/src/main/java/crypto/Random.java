@@ -15,7 +15,6 @@ public class Random {
 
     /**
      * Fill the bytes from SecureRandom.
-     * @param bts
      */
     public static final void nextBytes(byte[] bts) {
         secureRandom.nextBytes(bts);

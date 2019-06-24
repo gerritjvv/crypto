@@ -90,10 +90,14 @@ the issues/pull-requests won't just linger if github notifications doens't work.
 
 https://dzone.com/articles/publish-your-artifacts-to-maven-central
 
-### Release checklist
+### Release Process:
 
-#### gpg
+Follow:
 
+https://www.rainerhahnekamp.com/en/publishing-a-java-library-to-maven-central/
+
+
+Repository staging is deployed to https://oss.sonatype.org
 
 
 

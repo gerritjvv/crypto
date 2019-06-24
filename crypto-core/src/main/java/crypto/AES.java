@@ -8,11 +8,11 @@ import java.security.*;
 
 /**
  * Class that encrypts using AES, supports CBC+HMAC and GCM modes
- * <p/>
+ * <p>
  * Taken shamelessly from:
  * https://proandroiddev.com/security-best-practices-symmetric-encryption-with-aes-in-java-7616beaaade9
  * https://proandroiddev.com/security-best-practices-symmetric-encryption-with-aes-in-java-and-android-part-2-b3b80e99ad36
- * <p/>
+ * <p>
  * <p>
  * References:
  * GCM: https://tools.ietf.org/html/rfc4543#page-12
@@ -43,14 +43,39 @@ public class AES {
      * Performs a AES CBC encryption with HMAC
      * The result is a byte array with
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len], mac-len:byte, mac:byte-array[mac-len], encrypted-text:byte-array ]
+     *
+     * @param version any custom version you want to add to the output array
+     * @param key the key to use
+     * @param txt the text to encrypt
+     * @return the encrypted byte array
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchProviderException
      */
     public static final byte[] encryptCBC(byte version, Key.ExpandedKey key, byte[] txt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchProviderException {
         return encryptCBC(version, null, key, txt);
     }
 
     /**
+     *
      * This method allows to pass in a custom cipher provider.
      * By default please use {@link #encryptCBC(byte, Key.ExpandedKey, byte[])} which will use the default JCE provider.
+     * @param version any custom version you want to add to the output array
+     * @param key the key to use
+     * @param txt the text to encrypt
+     * @return the encrypted byte array
+     *
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchProviderException
      */
     public static final byte[] encryptCBC(byte version, String cipherProviderName, Key.ExpandedKey key, byte[] txt) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchProviderException {
 
@@ -106,7 +131,19 @@ public class AES {
      * Decrypt a AES CBC message encrypted with {@link #encryptCBC}
      * The expected message is:
      * <p>
-     * [ version:byte, iv-len:byte, iv:byte-array[iv-len],  mac-len:byte, mac:byte-array[mac-len],  encrypted-text:byte-array ]
+     * [ version:byte, iv-len:byte, iv:byte-array[iv-len],  mac-len:byte, mac:byte-array[mac-len],  encrypted-text:byte-array
+     *
+     * @param version any custom version you want to add to the output array
+     * @param key the key used to encrypt the data
+     * @param encryptedMessage the encrypted data
+     * @return the decrypted data
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchProviderException
      */
     public static final byte[] decryptCBC(byte version, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException {
         return decryptCBC(version, null, key, encryptedMessage);
@@ -115,6 +152,19 @@ public class AES {
     /**
      * This method allows to pass in a custom cipher.
      * By default please use {@link #decryptCBC(byte, Key.ExpandedKey, byte[])}} which will use the default JCE provider.
+     *
+     * @param version any custom version you want to add to the output array
+     * @param cipherProvider a JCE encryption provider
+     * @param key the key used to encrypt the data
+     * @param encryptedMessage the encrypted data
+     * @return the decrypted data
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchProviderException
      */
     public static final byte[] decryptCBC(byte version, String cipherProvider, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException {
 
@@ -177,6 +227,18 @@ public class AES {
      * The output message is:
      * <p>
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len], encrypted-text:byte-array ]
+     *
+     * @param version any custom version you want to add to the output array
+     * @param key the key to use for encryption
+     * @param txt the text to encrypt
+     * @return the encrypted data
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchProviderException
      */
     public static final byte[] encryptGCM(byte version, Key.ExpandedKey key, byte[] txt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchProviderException {
         return encryptGCM(version, null, key, txt);
@@ -185,6 +247,19 @@ public class AES {
     /**
      * This method allows to pass in a custom cipher.
      * By default please use {@link #decryptGCM(byte, Key.ExpandedKey, byte[])}  which will use the default JCE provider.
+     *
+     * @param version any custom version you want to add to the output array
+     * @param cipherProvider JCE provider
+     * @param key the key to use for encryption
+     * @param txt the plain text
+     * @return the encrypted data
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidAlgorithmParameterException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchProviderException
      */
     public static final byte[] encryptGCM(byte version, String cipherProvider, Key.ExpandedKey key, byte[] txt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, NoSuchProviderException {
 
@@ -210,6 +285,19 @@ public class AES {
         return output;
     }
 
+    /**
+     *
+     * @param key the key used for encryption
+     * @param encryptedMessage the encrypted data
+     * @return the decrypted data
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchProviderException
+     */
     public static final byte[] decryptGCM(Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException {
         return decryptGCM((byte) 0, key, encryptedMessage);
     }
@@ -219,6 +307,18 @@ public class AES {
      * The expected message is:
      * <p>
      * [ version:byte, iv-len:byte, iv:byte-array[iv-len], encrypted-text:byte-array ]
+     *
+     * @param version any custom version you want to add to the output array
+     * @param key the key used for encrypt the data
+     * @param encryptedMessage the encrypted data
+     * @return the decrypted data
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchProviderException
      */
     public static final byte[] decryptGCM(byte version, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException {
         return decryptGCM(version, null, key, encryptedMessage);
@@ -228,6 +328,19 @@ public class AES {
     /**
      * This method allows to pass in a custom cipher.
      * By default please use {@link #decryptGCM(byte, Key.ExpandedKey, byte[])}  which will use the default JCE provider.
+     *
+     * @param version any custom version you want to add to the output array
+     * @param cipherProvider JCE provider
+     * @param key the key used to encrypt the data
+     * @param encryptedMessage the encrypted data
+     * @return the decrypted data
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws NoSuchProviderException
      */
     public static final byte[] decryptGCM(byte version, String cipherProvider, Key.ExpandedKey key, byte[] encryptedMessage) throws NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, NoSuchPaddingException, NoSuchProviderException {
 

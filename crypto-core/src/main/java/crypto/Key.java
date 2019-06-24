@@ -53,7 +53,6 @@ public class Key {
         /**
          * Return a new byte array of correct length, and initialised with random values.
          *
-         * @return
          */
         public byte[] newKey() {
             byte[] bts = new byte[sizeBts];

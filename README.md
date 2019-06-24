@@ -75,6 +75,10 @@ byte[] decryptedData = crypto.AES.decryptGCM(key, encryptedData);
 See: [AESTest.java](https://github.com/gerritjvv/crypto/blob/master/crypto-core/src/test/java/crypto/AESTest.java)
 
 
+# License
+
+https://www.apache.org/licenses/LICENSE-2.0
+
 # Contributors
 
 Contributions PRs and suggestions are always welcome.

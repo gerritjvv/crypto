@@ -50,32 +50,32 @@ public class AesBuddy extends AesBase{
 
     private static final Object PRE_HASHED_KEY_512 = SHA512.invoke("mysecretkeyt");
 
-    @Benchmark
-    public void aes128CbcHmacSha256() throws Exception {
-        ENCRYPT.invoke(
-                AesUtil.plaintext,
-                PRE_HASHED_KEY_256,
-                RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
-                BUDDY_CONF_256);
-    }
-
-    @Benchmark
-    public void aes256CbcHmacSha512() throws Exception {
-        ENCRYPT.invoke(
-                AesUtil.plaintext,
-                PRE_HASHED_KEY_512,
-                RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
-                BUDDY_CONF_512);
-    }
-
-    @Benchmark
-    public void aes256GCM() throws Exception {
-        ENCRYPT.invoke(
-                AesUtil.plaintext,
-                PRE_HASHED_KEY_128,
-                RANDOM_BYTES.invoke(12L),
-                BUDDY_CONF_128_GCM);
-    }
+//    @Benchmark
+//    public void aes128CbcHmacSha256() throws Exception {
+//        ENCRYPT.invoke(
+//                AesUtil.plaintext,
+//                PRE_HASHED_KEY_256,
+//                RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
+//                BUDDY_CONF_256);
+//    }
+//
+//    @Benchmark
+//    public void aes256CbcHmacSha512() throws Exception {
+//        ENCRYPT.invoke(
+//                AesUtil.plaintext,
+//                PRE_HASHED_KEY_512,
+//                RANDOM_BYTES.invoke(16L, SECURE_RANDOM),
+//                BUDDY_CONF_512);
+//    }
+//
+//    @Benchmark
+//    public void aes256GCM() throws Exception {
+//        ENCRYPT.invoke(
+//                AesUtil.plaintext,
+//                PRE_HASHED_KEY_128,
+//                RANDOM_BYTES.invoke(12L),
+//                BUDDY_CONF_128_GCM);
+//    }
 
 
     /*

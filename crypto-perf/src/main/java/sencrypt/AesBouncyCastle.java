@@ -33,25 +33,25 @@ public class AesBouncyCastle extends AesBase{
             e.printStackTrace();
         }
     }
-
-    @Benchmark
-    public void enc_aes128CbcHmacSha256() throws Exception {
-        AES.encryptCBC(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, AesUtil.plaintext);
-    }
-
-    @Benchmark
-    public void enc_aes128GCM() throws Exception {
-        AES.encryptGCM(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, AesUtil.plaintext);
-    }
-
-
-    @Benchmark
-    public void dec_aes128CbcHmacSha256() throws Exception {
-        AES.decryptCBC(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, CBC_128_ENCRYPTED);
-    }
-
-    @Benchmark
-    public void dec_aes128GCM() throws Exception {
-        AES.decryptGCM(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, GCM_128_ENCRYPTED);
-    }
+//
+//    @Benchmark
+//    public void enc_aes128CbcHmacSha256() throws Exception {
+//        AES.encryptCBC(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, AesUtil.plaintext);
+//    }
+//
+//    @Benchmark
+//    public void enc_aes128GCM() throws Exception {
+//        AES.encryptGCM(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, AesUtil.plaintext);
+//    }
+//
+//
+//    @Benchmark
+//    public void dec_aes128CbcHmacSha256() throws Exception {
+//        AES.decryptCBC(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, CBC_128_ENCRYPTED);
+//    }
+//
+//    @Benchmark
+//    public void dec_aes128GCM() throws Exception {
+//        AES.decryptGCM(VERSION, PROVIDER, ENC_DEFAULT_KEY_128, GCM_128_ENCRYPTED);
+//    }
 }

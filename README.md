@@ -2,6 +2,21 @@
 
 A simple fast encryption library for the JVM uses standard best practices and standard JVM classes
 
+## Releases
+
+
+```xml
+<dependency>
+  <groupId>com.github.gerritjvv</groupId>
+  <artifactId>crypto-core</artifactId>
+  <version>LATEST</version>
+</dependency>
+```
+
+For the latest version see:  
+
+https://search.maven.org/artifact/com.github.gerritjvv/crypto-core/1.0/jar
+
 
 ## AES CBC 
 

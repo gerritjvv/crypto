@@ -15,51 +15,6 @@ var EncKey128, _ = GenerateNonce(16)
 
 var CipherText256, _ = EncryptCBCHmac(EncKey256, AuthKey256, PlainText, crypto.SHA256.New)
 var GcmCipherText, _ = EncryptGCM(EncKey128, PlainText)
-//
-//
-//func TestEncryptGCM(t *testing.T) {
-//
-//	// we make the key 32 bytes to test the key to 16 byte truncation
-//	encKey, _ := GenerateNonce(32)
-//
-//	encText, err := EncryptGCM(encKey, PlainText)
-//
-//	if err != nil {
-//		t.Error(err)
-//	}
-//
-//	plainText, err := DecryptGCM(encKey, encText)
-//
-//	if err != nil {
-//		t.Error(err)
-//	}
-//
-//	if ! hmac.Equal(PlainText, plainText) {
-//		t.Fail()
-//	}
-//}
-//
-//func TestEncryptCBC(t *testing.T) {
-//
-//	authKey, _ := GenerateNonce(32)
-//	encKey, _ := GenerateNonce(32)
-//
-//	encText, err := EncryptCBCHmac(encKey, authKey, PlainText, crypto.SHA256.New)
-//
-//	if err != nil {
-//		t.Error(err)
-//	}
-//
-//	plainText, err := DecryptCBCHmac(encKey, authKey, encText, crypto.SHA256.New)
-//
-//	if err != nil {
-//		t.Error(err)
-//	}
-//
-//	if ! hmac.Equal(PlainText, plainText) {
-//		t.Fail()
-//	}
-//}
 
 
 func TestNaiveTimesEncryptGCM(b *testing.T) {
@@ -68,7 +23,7 @@ func TestNaiveTimesEncryptGCM(b *testing.T) {
 	//warmup
 	NaiveTimesGCMEncrypt(n)
 
-	for i := 0 ; i < 5; i++ {
+	for i := 0 ; i < 10; i++ {
 		elasped := NaiveTimesGCMEncrypt(n)
 		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
@@ -101,7 +56,7 @@ func TestNaiveTimesDecryptGCM(b *testing.T) {
 	NaiveTimesGCMEncrypt(n)
 
 	for i := 0 ; i < 10; i++ {
-		elasped := NaiveTimesGCMEncrypt(n)
+		elasped := NaiveTimesDecryptGCM(n)
 		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
 }
@@ -164,7 +119,7 @@ func TestNaiveTimesDecryptCBC256(b *testing.T) {
 	NaiveTimesGCMEncrypt(n)
 
 	for i := 0 ; i < 10; i++ {
-		elasped := NaiveTimesEncryptCBC256(n)
+		elasped := NaiveTimesDecryptCBC256(n)
 		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
 }

@@ -70,10 +70,63 @@ plainText, err := DecryptGCM(encKey, encText)
 Note: You should run your own, benchmarks behave differently depending on the platform libs etc...
 
 ```bash
-BenchmarkEncryptGCM-12            300000              4342 ns/op
-BenchmarkDecryptGCM-12            500000              4201 ns/op
-BenchmarkEncryptCBC256-12         100000             18620 ns/op
-BenchmarkDecryptCBC256-12         100000             18493 ns/op
+=== RUN   TestNaiveTimesEncryptGCM
+Run 0. Did 1000000 iterations in 4.552525345s
+Run 1. Did 1000000 iterations in 4.394497028s
+Run 2. Did 1000000 iterations in 4.315440261s
+Run 3. Did 1000000 iterations in 4.216099154s
+Run 4. Did 1000000 iterations in 4.224905071s
+Run 5. Did 1000000 iterations in 4.329739994s
+Run 6. Did 1000000 iterations in 4.201837049s
+Run 7. Did 1000000 iterations in 4.395699741s
+Run 8. Did 1000000 iterations in 4.234307622s
+Run 9. Did 1000000 iterations in 4.216855153s
+--- PASS: TestNaiveTimesEncryptGCM (47.95s)
+237991
+
+=== RUN   TestNaiveTimesDecryptGCM
+Run 0. Did 1000000 iterations in 4.238816206s
+Run 1. Did 1000000 iterations in 4.321026922s
+Run 2. Did 1000000 iterations in 4.333051401s
+Run 3. Did 1000000 iterations in 4.284579845s
+Run 4. Did 1000000 iterations in 4.388479424s
+Run 5. Did 1000000 iterations in 4.214709358s
+Run 6. Did 1000000 iterations in 4.333209745s
+Run 7. Did 1000000 iterations in 4.227069213s
+Run 8. Did 1000000 iterations in 4.194827887s
+Run 9. Did 1000000 iterations in 4.338822797s
+--- PASS: TestNaiveTimesDecryptGCM (47.23s)
+
+=== RUN   TestNaiveTimesEncryptCBC256
+Run 0. Did 1000000 iterations in 18.594550632s
+Run 1. Did 1000000 iterations in 18.461138782s
+Run 2. Did 1000000 iterations in 18.188842315s
+Run 3. Did 1000000 iterations in 18.375593346s
+Run 4. Did 1000000 iterations in 18.36304104s
+Run 5. Did 1000000 iterations in 18.32109541s
+Run 6. Did 1000000 iterations in 18.238426637s
+Run 7. Did 1000000 iterations in 18.532891266s
+Run 8. Did 1000000 iterations in 18.50271729s
+Run 9. Did 1000000 iterations in 18.235587816s
+--- PASS: TestNaiveTimesEncryptCBC256 (188.07s)
+
+
+=== RUN   TestNaiveTimesDecryptCBC256
+Run 0. Did 1000000 iterations in 17.640670182s
+Run 1. Did 1000000 iterations in 17.76092337s
+Run 2. Did 1000000 iterations in 17.690241448s
+Run 3. Did 1000000 iterations in 17.589082895s
+Run 4. Did 1000000 iterations in 17.617454398s
+Run 5. Did 1000000 iterations in 17.849383898s
+Run 6. Did 1000000 iterations in 17.765126291s
+Run 7. Did 1000000 iterations in 20.085845014s
+Run 8. Did 1000000 iterations in 19.152553922s
+Run 9. Did 1000000 iterations in 18.902370885s
+--- PASS: TestNaiveTimesDecryptCBC256 (186.40s)
+PASS
+ok      crypto/pkg/crypto2      469.661s
+
+
 ```
 
 ## Compile, test and bench
@@ -81,7 +134,6 @@ BenchmarkDecryptCBC256-12         100000             18493 ns/op
 ```bash
 ./build.sh build
 ./build.sh test
-./build.sh bench
 ```
 
 ## References 

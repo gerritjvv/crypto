@@ -2,8 +2,9 @@ package crypto2
 
 import (
 	"crypto"
-	"crypto/hmac"
+	"fmt"
 	"testing"
+	"time"
 )
 
 var PlainText, _ = GenerateNonce(4096)
@@ -14,110 +15,177 @@ var EncKey128, _ = GenerateNonce(16)
 
 var CipherText256, _ = EncryptCBCHmac(EncKey256, AuthKey256, PlainText, crypto.SHA256.New)
 var GcmCipherText, _ = EncryptGCM(EncKey128, PlainText)
+//
+//
+//func TestEncryptGCM(t *testing.T) {
+//
+//	// we make the key 32 bytes to test the key to 16 byte truncation
+//	encKey, _ := GenerateNonce(32)
+//
+//	encText, err := EncryptGCM(encKey, PlainText)
+//
+//	if err != nil {
+//		t.Error(err)
+//	}
+//
+//	plainText, err := DecryptGCM(encKey, encText)
+//
+//	if err != nil {
+//		t.Error(err)
+//	}
+//
+//	if ! hmac.Equal(PlainText, plainText) {
+//		t.Fail()
+//	}
+//}
+//
+//func TestEncryptCBC(t *testing.T) {
+//
+//	authKey, _ := GenerateNonce(32)
+//	encKey, _ := GenerateNonce(32)
+//
+//	encText, err := EncryptCBCHmac(encKey, authKey, PlainText, crypto.SHA256.New)
+//
+//	if err != nil {
+//		t.Error(err)
+//	}
+//
+//	plainText, err := DecryptCBCHmac(encKey, authKey, encText, crypto.SHA256.New)
+//
+//	if err != nil {
+//		t.Error(err)
+//	}
+//
+//	if ! hmac.Equal(PlainText, plainText) {
+//		t.Fail()
+//	}
+//}
 
 
-func TestEncryptGCM(t *testing.T) {
+func TestNaiveTimesEncryptGCM(b *testing.T) {
 
-	// we make the key 32 bytes to test the key to 16 byte truncation
-	encKey, _ := GenerateNonce(32)
+	n := 1000000
+	//warmup
+	NaiveTimesGCMEncrypt(n)
 
-	encText, err := EncryptGCM(encKey, PlainText)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	plainText, err := DecryptGCM(encKey, encText)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	if ! hmac.Equal(PlainText, plainText) {
-		t.Fail()
+	for i := 0 ; i < 5; i++ {
+		elasped := NaiveTimesGCMEncrypt(n)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
 }
 
-func TestEncryptCBC(t *testing.T) {
+func NaiveTimesGCMEncrypt(n int)  time.Duration{
+	startTime := time.Now()
 
-	authKey, _ := GenerateNonce(32)
-	encKey, _ := GenerateNonce(32)
-
-	encText, err := EncryptCBCHmac(encKey, authKey, PlainText, crypto.SHA256.New)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	plainText, err := DecryptCBCHmac(encKey, authKey, encText, crypto.SHA256.New)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	if ! hmac.Equal(PlainText, plainText) {
-		t.Fail()
-	}
-}
-
-func BenchmarkEncryptGCM(b *testing.B) {
-
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < n; i++ {
 		encText, err := EncryptGCM(EncKey128, PlainText)
 
 		if err != nil {
-			b.Error(err)
+			panic(err)
 		}
 
 		if encText == nil {
-			b.Error("Encrypted text cannot be nil")
+			panic("Encrypted text cannot be nil")
 		}
+	}
+
+
+	elapsed := time.Since(startTime)
+
+	return elapsed
+}
+
+func TestNaiveTimesDecryptGCM(b *testing.T) {
+	n := 1000000
+	//warmup
+	NaiveTimesGCMEncrypt(n)
+
+	for i := 0 ; i < 10; i++ {
+		elasped := NaiveTimesGCMEncrypt(n)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
 }
 
+func NaiveTimesDecryptGCM(n int) time.Duration {
+	startTime := time.Now()
 
-
-func BenchmarkDecryptGCM(b *testing.B) {
-
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < n; i++ {
 		text, err := DecryptGCM(EncKey128, GcmCipherText)
 
 		if err != nil {
-			b.Error(err)
+			panic(err)
 		}
 
 		if text == nil {
-			b.Error("Plain text cannot be nil")
+			panic("Plain text cannot be nil")
 		}
+	}
+
+
+	elapsed := time.Since(startTime)
+
+	return elapsed
+}
+
+func TestNaiveTimesEncryptCBC256(b *testing.T) {
+	n := 1000000
+	//warmup
+	NaiveTimesGCMEncrypt(n)
+
+	for i := 0 ; i < 10; i++ {
+		elasped := NaiveTimesEncryptCBC256(n)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
 }
 
-func BenchmarkEncryptCBC256(b *testing.B) {
+func NaiveTimesEncryptCBC256(n int) time.Duration {
+	startTime := time.Now()
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < n; i++ {
 		encText, err := EncryptCBCHmac(EncKey256, AuthKey256, PlainText, crypto.SHA256.New)
 
 		if err != nil {
-			b.Error(err)
+			panic(err)
 		}
 
 		if encText == nil {
-			b.Error("Encrypted text cannot be nil")
+			panic("Encrypted text cannot be nil")
 		}
+	}
+
+	elapsed := time.Since(startTime)
+
+	return elapsed
+}
+
+func TestNaiveTimesDecryptCBC256(b *testing.T) {
+	n := 1000000
+	//warmup
+	NaiveTimesGCMEncrypt(n)
+
+	for i := 0 ; i < 10; i++ {
+		elasped := NaiveTimesEncryptCBC256(n)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
 	}
 }
 
-func BenchmarkDecryptCBC256(b *testing.B) {
+func NaiveTimesDecryptCBC256(n int) time.Duration {
+	startTime := time.Now()
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < n; i++ {
 		text, err := DecryptCBCHmac(EncKey256, AuthKey256, CipherText256, crypto.SHA256.New)
 
 		if err != nil {
-			b.Error(err)
+			panic(err)
 		}
 
 		if text == nil {
-			b.Error("Plain text cannot be nil")
+			panic("Plain text cannot be nil")
 		}
 	}
+
+	elapsed := time.Since(startTime)
+
+	return elapsed
+
 }

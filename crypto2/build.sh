@@ -15,13 +15,13 @@ build () {
 
 test () {
 
- (cd "$DIR" && go test -v ./...)
+ (cd "$DIR" && go test -cpu 1 -v ./...)
 
 }
 
 bench () {
 
- (cd "$DIR" && go test -v -cpu 1 -benchmem -cpuprofile "$DIR/"cpu.prof -memprofile "$DIR/"mem.prof -bench=. ./...)
+ (cd "$DIR" && go test -v -cpu 1 -benchmem -bench=. ./...)
 }
 
 case "$CMD" in

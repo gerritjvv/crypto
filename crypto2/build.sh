@@ -21,7 +21,7 @@ test () {
 
 bench () {
 
- (cd "$DIR" && go test -v -bench=. ./...)
+ (cd "$DIR" && go test -v -cpuprofile "$DIR/"cpu.prof -memprofile "$DIR/"mem.prof -bench=. ./...)
 }
 
 case "$CMD" in

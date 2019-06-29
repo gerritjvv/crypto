@@ -2,9 +2,11 @@
 
 A simple fast encryption library for the JVM uses standard best practices and standard JVM classes
 
+
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.gerritjvv/crypto-core.svg)](https://search.maven.org/artifact/com.github.gerritjvv/crypto-core/)
 
 [![Javadocs](https://javadoc.io/badge/com.github.gerritjvv/crypto-core.svg)](https://javadoc.io/doc/com.github.gerritjvv/crypto-core)
+
 
 ## Releases
 

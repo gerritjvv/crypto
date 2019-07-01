@@ -19,6 +19,21 @@ A simple fast encryption library for the JVM uses standard best practices and st
 </dependency>
 ```
 
+## Password derivation
+
+If you're not using an encryption key but directly using the user password, you must first
+run a key derivation routine on it.
+
+```java
+byte[] pass = Key.deriveHmac256FromPass(null, "user-pass");
+```
+
+and then you can use:
+
+```java
+byte[] key = Key.KeySize.AES_128.genKeysHmacSha(pass);
+```
+
 ## AES CBC 
 
 AES CBC encryption is HMACed and the result message contains   
@@ -42,7 +57,7 @@ byte[] pass = crypto.Util.genData(4096);
 byte[] someData = "Some Data".getBytes();
 
 // generate encryption and authentication keys
-Key.ExpandedKey key = Ke.KeySize.AES_128.genKeysHmacSha(pass);
+Key.ExpandedKey key = Key.KeySize.AES_128.genKeysHmacSha(pass);
 
 // encrypt the data
 byte[] encryptedData = crypto.AES.encryptCBC(key, someData);
@@ -76,7 +91,7 @@ byte[] pass = crypto.Util.genData(4096);
 byte[] someData = "Some Data".getBytes();
 
 // generate encryption and authentication keys
-Key.ExpandedKey key = Ke.KeySize.AES_128.genKeysHmacSha(pass);
+Key.ExpandedKey key = Key.KeySize.AES_128.genKeysHmacSha(pass);
 
 // encrypt the data
 byte[] encryptedData = crypto.AES.encryptGCM(key, someData);

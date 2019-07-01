@@ -1,7 +1,6 @@
 package crypto;
 
 import at.favre.lib.crypto.HKDF;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -68,12 +67,49 @@ public class Key {
         /**
          * Generates a SHA-512 encryption key, and a SHA-256 authentication key.
          */
+        /**
+         *
+         * @param key they key must already be a relatively random key.
+         * @return
+         */
         public ExpandedKey genKeysHmacSha(byte[] key) {
             byte[] encKey = HKDF.fromHmacSha512().expand(key, ENC_KEY_META, sizeBts);
             byte[] authKey = HKDF.fromHmacSha256().expand(key, AUTH_KEY_META, macSizeBts); //HMAC-SHA256 key is 32, HMAC-SHA512 key is 64 byte
             return new ExpandedKey(this, key, encKey, authKey);
         }
 
+    }
+
+    /**
+     * Important: Do not use with a weak key like a user password, use {@link #deriveHmac256FromPass(byte[], byte[])}
+     * @param randomKey must be an already good pseudo random key
+     * @return 64 byte expanded key
+     */
+    public static final byte[] genHmacSha256(byte[] randomKey) {
+        return HKDF.fromHmacSha256().expand(randomKey, ENC_KEY_META, 64);
+    }
+
+    /**
+     * Extracts, and expands from a low entropy password using an optional sal.
+     *
+     * @param salt can be null
+     * @param pass any non secure random key
+     * @return a derived 64 byte key
+     */
+    public static final byte[] deriveHmac256FromPass (byte[] salt, byte[] pass) {
+        byte[] pseudoRandomKey = HKDF.fromHmacSha256().extract(salt, pass);
+        return  HKDF.fromHmacSha256().expand(pseudoRandomKey, null, 64);
+    }
+    /**
+     * Extracts, and expands from a low entropy password using an optional sal.
+     *
+     * @param salt can be null
+     * @param pass any non secure random key
+     * @return a derived 64 byte key
+     */
+    public static final byte[] deriveHmac512FromPass (byte[] salt, byte[] pass) {
+        byte[] pseudoRandomKey = HKDF.fromHmacSha512().extract(salt, pass);
+        return  HKDF.fromHmacSha512().expand(pseudoRandomKey, null, 64);
     }
 
     /**

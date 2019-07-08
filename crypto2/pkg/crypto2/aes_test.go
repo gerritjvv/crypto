@@ -16,16 +16,16 @@ var EncKey128, _ = GenerateNonce(16)
 var CipherText256, _ = EncryptCBCHmac(EncKey256, AuthKey256, PlainText, crypto.SHA256.New)
 var GcmCipherText, _ = EncryptGCM(EncKey128, PlainText)
 
+const N = 1000000
 
 func TestNaiveTimesEncryptGCM(b *testing.T) {
 
-	n := 1000000
 	//warmup
-	NaiveTimesGCMEncrypt(n)
+	NaiveTimesGCMEncrypt(N)
 
 	for i := 0 ; i < 10; i++ {
-		elasped := NaiveTimesGCMEncrypt(n)
-		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
+		elasped := NaiveTimesGCMEncrypt(N)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, N, elasped)
 	}
 }
 
@@ -51,13 +51,12 @@ func NaiveTimesGCMEncrypt(n int)  time.Duration{
 }
 
 func TestNaiveTimesDecryptGCM(b *testing.T) {
-	n := 1000000
 	//warmup
-	NaiveTimesGCMEncrypt(n)
+	NaiveTimesGCMEncrypt(N)
 
 	for i := 0 ; i < 10; i++ {
-		elasped := NaiveTimesDecryptGCM(n)
-		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
+		elasped := NaiveTimesDecryptGCM(N)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, N, elasped)
 	}
 }
 
@@ -83,13 +82,12 @@ func NaiveTimesDecryptGCM(n int) time.Duration {
 }
 
 func TestNaiveTimesEncryptCBC256(b *testing.T) {
-	n := 1000000
 	//warmup
-	NaiveTimesGCMEncrypt(n)
+	NaiveTimesGCMEncrypt(N)
 
 	for i := 0 ; i < 10; i++ {
-		elasped := NaiveTimesEncryptCBC256(n)
-		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
+		elasped := NaiveTimesEncryptCBC256(N)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, N, elasped)
 	}
 }
 
@@ -114,13 +112,12 @@ func NaiveTimesEncryptCBC256(n int) time.Duration {
 }
 
 func TestNaiveTimesDecryptCBC256(b *testing.T) {
-	n := 1000000
 	//warmup
-	NaiveTimesGCMEncrypt(n)
+	NaiveTimesGCMEncrypt(N)
 
 	for i := 0 ; i < 10; i++ {
-		elasped := NaiveTimesDecryptCBC256(n)
-		fmt.Printf("Run %d. Did %d iterations in %s\n", i, n, elasped)
+		elasped := NaiveTimesDecryptCBC256(N)
+		fmt.Printf("Run %d. Did %d iterations in %s\n", i, N, elasped)
 	}
 }
 

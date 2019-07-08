@@ -103,6 +103,12 @@ THE POSSIBILITY OF SUCH DAMAGE.
             <version>1.0.2</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.conscrypt</groupId>
+            <artifactId>conscrypt-openjdk-uber</artifactId>
+            <version>2.1.0</version>
+        </dependency>
     </dependencies>
 
     <properties>

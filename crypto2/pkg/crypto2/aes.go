@@ -289,12 +289,8 @@ func GenerateNonce(size int) ([]byte, error) {
 
 // Copy from pkg into a dest byte array
 func Copy(src []byte, srcI int, dest []byte, destI int, copyLen int)  {
-
-	for i := 0; i < copyLen; i++ {
-		dest[destI] = src[srcI]
-		destI++
-		srcI++
-	}
+	srcI2 := srcI + copyLen
+	copy(dest[destI:], src[srcI:srcI2])
 }
 
 // Shamelessly taken from https://stackoverflow.com/questions/41579325/golang-how-do-i-decrypt-with-des-cbc-and-pkcs7
